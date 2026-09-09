@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Smurfs: A Refugee Survival Guide</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Chango&amp;family=Fredoka:wght@400;500;600&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --smurf-blue: #1677c8;
+  --deep-blue: #0b3c73;
+  --sky: #dff4ff;
+  --pink: #e95aa4;
+  --gold: #f4c542;
+  --ink: #213547;
+  --paper: rgba(255,255,255,.96);
+  --soft: #f6fbff;
+  --green: #4c9c6b;
+  --shadow: 0 14px 38px rgba(16, 53, 84, .15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Quicksand','Fredoka',sans-serif;
+  color: var(--ink);
+  line-height: 1.65;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255,255,255,.8), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(255,255,255,.55), transparent 30%),
+    linear-gradient(180deg, #8fd3ff 0%, #dff4ff 28%, #eef9f0 72%, #d9efd4 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body.large-text { font-size: 19px; }
+body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+.container { width: min(1080px, calc(100% - 32px)); margin: 0 auto; padding: 24px 0 70px; }
+header {
+  text-align: center;
+  margin: 18px 0 28px;
+  padding: 28px clamp(18px,4vw,48px);
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(247,252,255,.93));
+  border: 1px solid rgba(20,91,150,.14);
+  border-radius: 26px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+header::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -75px -10%;
+  height: 120px;
+  background: radial-gradient(ellipse, rgba(22,119,200,.13), transparent 68%);
+}
+.hero-logo {
+  display: block;
+  width: min(680px, 92%);
+  height: auto;
+  margin: 0 auto 8px;
+  object-fit: contain;
+}
+.subtitle {
+  font-family: 'Chango',sans-serif;
+  color: var(--deep-blue);
+  font-size: clamp(1.15rem,3vw,1.55rem);
+  letter-spacing: .04em;
+}
+.field-note {
+  margin: 14px auto 0;
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff7d6;
+  border: 1px solid #efd67b;
+  font-size: .92rem;
+  font-weight: 700;
+}
+.guide-nav {
+  position: sticky;
+  top: 10px;
+  z-index: 500;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+  margin: 0 0 26px;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(22,119,200,.14);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(22,73,114,.1);
+}
+.guide-nav a {
+  flex: 0 0 auto;
+  text-decoration: none;
+  color: var(--deep-blue);
+  background: #eef8ff;
+  border: 1px solid #cdeaff;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .86rem;
+}
+.guide-nav a:hover { background: #d9f0ff; }
+.utility-tools {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.utility-tools button {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  padding: 0;
+  box-shadow: 0 5px 14px rgba(0,0,0,.18);
+  font-size: .9rem;
+}
+.guide-section {
+  background: var(--paper);
+  margin: 0 0 26px;
+  padding: clamp(22px,4vw,38px);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(19,82,132,.1);
+  position: relative;
+}
+.guide-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 26px;
+  bottom: 26px;
+  width: 5px;
+  border-radius: 0 6px 6px 0;
+  background: linear-gradient(var(--smurf-blue), var(--pink));
+}
+h1,h2,h3,h4 { line-height: 1.2; }
+section h2 {
+  font-family: 'Chango',sans-serif;
+  color: var(--pink);
+  font-size: clamp(1.55rem,4vw,2.15rem);
+  margin-bottom: 16px;
+  letter-spacing: .015em;
+}
+section h3 {
+  font-family: 'Chango',sans-serif;
+  color: var(--deep-blue);
+  font-size: clamp(1.12rem,3vw,1.45rem);
+  margin: 25px 0 10px;
+}
+section h4 { margin: 14px 0 8px; color: var(--deep-blue); }
+p { margin-bottom: 15px; }
+ul { margin: 10px 0 18px 22px !important; }
+li { margin-bottom: 8px; }
+.smurf-word { font-weight: 800; color: #d8177d; font-style: italic; }
+.guide-image {
+  display: block;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(26,65,98,.16);
+  object-fit: contain;
+}
+.wide-image { width: min(100%, 980px); }
+.medium-art { width: min(100%, 760px); }
+.portrait-art { width: min(100%, 560px); }
+.small-art { width: min(100%, 460px); image-rendering: auto; }
+.lore-art { width: 100%; max-height: none; }
+.image-row {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 18px 0;
+}
+.lore-section {
+  display: grid;
+  grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr);
+  gap: 24px;
+  align-items: center;
+  margin: 20px 0;
+}
+.lore-text {
+  background: #fff9e9;
+  padding: 22px;
+  border-radius: 14px;
+  border-left: 4px solid var(--pink);
+}
+.interactive-box {
+  background: linear-gradient(180deg,#f3faff,#edf7ff);
+  border: 2px dashed #5aa8e5;
+  padding: clamp(18px,3vw,26px);
+  margin: 22px 0;
+  border-radius: 16px;
+}
+.interactive-box h3 { margin-top: 0; }
+button {
+  appearance: none;
+  border: none;
+  background: var(--pink);
+  color: #fff;
+  padding: 11px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  margin: 7px 5px 7px 0;
+  transition: transform .15s ease, background .2s ease;
+}
+button:hover { transform: translateY(-1px); background: #d94190; }
+button.secondary { background: var(--smurf-blue); }
+button.secondary:hover { background: #0e67b2; }
+button:focus-visible, a:focus-visible, select:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+select, input[type="text"], input[type="number"] {
+  width: min(100%, 380px);
+  padding: 10px 12px;
+  margin: 6px 0;
+  border: 2px solid #8bc7ef;
+  border-radius: 9px;
+  font: inherit;
+  background: white;
+}
+.result-box {
+  display: none;
+  margin-top: 15px;
+  padding: 16px;
+  background: #fff9db;
+  border: 1px solid #eed66b;
+  border-radius: 12px;
+}
+.result-box.show { display: block; }
+.hierarchy-list {
+  background: #f7f9fb;
+  padding: 14px;
+  border-radius: 14px;
+  margin: 16px 0;
+}
+.hierarchy-list li {
+  list-style: none;
+  background: white;
+  border-left: 4px solid var(--pink);
+  margin: 7px 0;
+  padding: 10px 12px;
+  border-radius: 7px;
+}
+.video-container {
+  background: #eff8ff;
+  border: 1px solid #9fd2f4;
+  padding: 12px;
+  margin: 18px 0;
+  border-radius: 15px;
+}
+.video-container iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+  border-radius: 10px;
+}
+.p5-container {
+  width: 100%;
+  overflow: hidden;
+  margin: 18px auto;
+  text-align: center;
+}
+.p5-container canvas { display: block; margin: 0 auto; max-width: 100%; height: auto !important; border-radius: 12px; }
+.checklist {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.check-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #d9eaf6;
+  border-radius: 11px;
+}
+.check-item input { width: 18px; height: 18px; margin-top: 4px; accent-color: var(--smurf-blue); }
+.progress-shell {
+  width: 100%;
+  height: 12px;
+  margin: 14px 0 5px;
+  background: #dbeaf4;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg,var(--smurf-blue),#55c988); transition: width .25s ease; }
+.progress-label { font-weight: 800; color: var(--deep-blue); }
+.game-status {
+  min-height: 28px;
+  text-align: center;
+  font-weight: 800;
+  margin-top: 8px;
+}
+footer {
+  width: min(1080px, calc(100% - 32px));
+  margin: 0 auto 38px;
+  text-align: center;
+  color: #35546c;
+  font-size: .9rem;
+}
+.scroll-smurf-left,.scroll-smurf-right {
+  position: fixed;
+  top: 50%;
+  z-index: 30;
+  opacity: .18;
+  pointer-events: none;
+  transition: transform .2s ease-out, opacity .2s ease-out;
+}
+.scroll-smurf-left { left: 12px; }
+.scroll-smurf-right { right: 12px; }
+@media (max-width: 820px) {
+  .lore-section { grid-template-columns: 1fr; }
+  .scroll-smurf-left,.scroll-smurf-right { display:none; }
+  .utility-tools { right: 10px; bottom: 10px; }
+}
+@media (max-width: 560px) {
+  .container { width: min(100% - 18px, 1080px); }
+  .guide-section { padding: 20px 18px 22px; border-radius: 17px; }
+  .guide-nav { top: 5px; }
+  button { width: 100%; margin-right: 0; }
+}
+</style>
+</head>
+<body><div aria-label="Accessibility tools" class="utility-tools"><button aria-label="Toggle larger text" onclick="toggleTextSize()" title="Toggle larger text" type="button">A+</button><button aria-label="Toggle reduced motion" class="secondary" onclick="toggleMotion()" title="Reduce motion" type="button">◫</button></div>
+<!-- Scroll Animation Smurfs -->
+<div class="scroll-smurf-left">🍄</div>
+<div class="scroll-smurf-right">🍄</div>
+<div class="container">
+<!-- LOGO AREA -->
+<!-- HEADER -->
+<header>
+<img alt="The Smurfs: A Refugee Survival Guide" class="hero-logo" src="assets/logo-upscaled.png"/>
+<p class="subtitle">Welcome to Smurfville!</p>
+<div class="field-note">Orientation File 01 • Read slowly • Ask for help • No Smurf left behind</div></header><nav aria-label="Guide sections" class="guide-nav"><a href="#arrival">Arrival</a><a href="#ancestors">Ancestors</a><a href="#leadership">Leadership</a><a href="#threats">Safety</a><a href="#shelter">Shelter</a><a href="#corridors">Food + Tunnels</a><a href="#etiquette">Etiquette</a><a href="#language">Language</a></nav>
+<!-- WELCOME SECTION -->
+<section class="guide-section" id="arrival">
+<h2>Welcome, New Smurf!</h2>
+<p>You have traveled far and braved much to reach us. <span class="smurf-word">Smurf's blessings</span> on your journey, little one!</p>
+<p>Smurf Village has stood for thousands of years uninterrupted, sheltering Smurfs from across the planet. Why? Not because we are the strongest, but because we have learned to live together with wisdom, care, and a deep respect for each other and the land we call home. This is what <span class="smurf-word">smurfy</span> means—a life of intention, community, and belonging.</p>
+<p>You will notice we do not go to war. This is not weakness. Under the leadership of <span class="smurf-word">Smurfette</span>, our village thrives through cooperation, preparation, and the strength that comes from knowing each other deeply. We have many Smurfettes who lead with wisdom, and this balance is intentional. The feminine wisdom that shapes our leadership has kept us safe through countless challenges. We <span class="smurf-word">smurf</span> together, and together we are unbreakable.</p>
+<p>This guide will help you understand how we live, how we protect ourselves, and how you can become part of this community. Take your time. Listen. Learn. You are <span class="smurf-word">smurf home</span> now.</p>
+<img alt="Welcome scene of Smurf Village" class="guide-image wide-image" src="assets/welcome-village.jpg"/>
+</section><section class="guide-section" id="first-24-hours"><h2>Your First 24 Hours in Smurf Village</h2><p>A refugee guide should help you do something immediately. Use this arrival checklist as your first-day orientation.</p><div class="interactive-box"><h3>Interactive: Arrival Checklist</h3><p>Check each step as you complete it. Your progress is saved while this page stays open.</p><div class="checklist" id="arrivalChecklist"><label class="check-item"><input onchange="updateArrivalProgress()" type="checkbox" value="shelter"/><span>Find your assigned shelter and nearest corridor entrance.</span></label><label class="check-item"><input onchange="updateArrivalProgress()" type="checkbox" value="bells"/><span>Learn the 3 / 5 / 7 bell signal system.</span></label><label class="check-item"><input onchange="updateArrivalProgress()" type="checkbox" value="people"/><span>Meet one caretaker and one scout.</span></label><label class="check-item"><input onchange="updateArrivalProgress()" type="checkbox" value="water"/><span>Locate drinking water and the shared meal area.</span></label><label class="check-item"><input onchange="updateArrivalProgress()" type="checkbox" value="language"/><span>Practice one Smurf phrase with a neighbor.</span></label><label class="check-item"><input onchange="updateArrivalProgress()" type="checkbox" value="gathering"/><span>Identify the village gathering point.</span></label></div><div class="progress-shell"><div class="progress-bar" id="arrivalProgress"></div></div><div class="progress-label" id="arrivalProgressLabel">0 of 6 complete</div></div></section>
+<!-- SMURF LORE AND ANCESTORS SECTION -->
+<section class="guide-section" id="ancestors">
+<h2>Smurf Lore and Message from the Ancestors</h2>
+<p>The elders have preserved our story through the ages. Learn how we became who we are, how we face challenges with heart and community, and what <span class="smurf-word">smurfing</span> truly means.</p>
+<div class="lore-section">
+<div class="lore-text">
+<h3 style="color: #FF69B4; font-family: 'Chango', sans-serif;">Our Sacred Story</h3>
+<p>Long ago, when the world was vast and frightening, our ancestors gathered under the moonlight. They made a covenant: to survive not through strength or violence, but through cooperation, wisdom, and an unbreakable bond with each other. They learned to read the seasons, to honor the earth, and to understand that the greatest defense is a community that never abandons one another.</p>
+<p>It was then that they discovered what it meant to <span class="smurf-word">smurf it out</span>—to solve problems together. To listen first, decide together, act as one. This is the gift our ancestors left us.</p>
+</div>
+<img alt="Council of Elders" class="guide-image lore-art" src="assets/ancestral-council.png"/>
+</div>
+<h3>Rarely Found Ancestral Archival Footage</h3>
+<p>These precious recordings show how our village has grown, how we care for one another, and how even in the face of conflict, compassion prevails:</p>
+<h4 style="font-family: 'Chango', sans-serif; color: #4169E1; margin-top: 15px;">Episode 1: Compassion in the Face of Conflict</h4>
+<p>Even our greatest adversaries deserve care. Watch how we welcomed and healed Gargamel when he was sick, showing that true strength is not dominance, but compassion.</p>
+<div class="video-container">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="400" src="https://www.youtube.com/embed/wFn3MnrH_5s" width="100%"></iframe>
+</div>
+</section>
+<!-- LIVING IN HARMONY SECTION -->
+<section class="guide-section" id="ecology">
+<h2>Living in Harmony with the Planet</h2>
+<p>Our survival rests on one sacred principle: we work with the land, not against it. The forest protects us because we protect the forest. We <span class="smurf-word">smurf</span> the earth with care, and it rewards us with abundance.</p>
+<h3>What This Means</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Symbiotic Relationships:</strong> We cultivate mushroom circles that feed us while nourishing the soil. The forest provides shelter; we tend its growth.</li>
+<li><strong>Weather as Teacher:</strong> We read the seasons deeply. Storm patterns, snow cycles, ocean currents - all tell us when to prepare, when to gather, when to rest.</li>
+<li><strong>Reciprocal Care:</strong> Every Smurf learns to plant, to harvest respectfully, to leave space for regrowth. This is not just survival - it is respect.</li>
+<li><strong>The Land Protects Us:</strong> Because we honor it, the forest camouflages our village. Valleys and ridges hide us. Dense trees become our fortress. The earth itself becomes our ally.</li>
+</ul>
+<img alt="Smurf Village mushroom forest environment" class="guide-image wide-image" src="assets/forest-environment.png"/>
+</section>
+<!-- OUR VILLAGE AND LEADERSHIP SECTION -->
+<section class="guide-section" id="leadership">
+<h2>Our Village Structure &amp; Leadership</h2>
+<h3>Smurfettocracy: Rule by Smurfette</h3>
+<p><span class="smurf-word">Smurfette</span> is our leader, and her wisdom guides all decisions. In our village, feminine leadership has proven to be the foundation of our peace and longevity. She does not rule through command. She listens. She decides with the council. She protects without aggression. This is why we do not war. This is why we endure.</p>
+<img alt="Respect the Matriarchy, love Smurfette" class="guide-image portrait-art" src="assets/respect-matriarchy.png"/>
+<h3>The Hierarchy (Roles, Not Ranks)</h3>
+<div class="hierarchy-list">
+<li><strong>Smurfette (Leader):</strong> Keeper of vision, arbiter of disputes, voice of the village</li>
+<li><strong>Council of Elders:</strong> Smurfs who have survived many seasons and guide policy</li>
+<li><strong>Caretakers:</strong> Those who tend food, water, and living spaces</li>
+<li><strong>Scouts &amp; Protectors:</strong> Alert to danger, first to respond to threats</li>
+<li><strong>Builders &amp; Craftspeople:</strong> Create and maintain shelter, tools, and infrastructure</li>
+<li><strong>Healers:</strong> Care for the injured and ill</li>
+<li><strong>Teachers:</strong> Pass knowledge to young Smurfs</li>
+<li><strong>All Smurfs:</strong> Contribute to community in their own way</li>
+</div>
+</section>
+<!-- THE THREATS SECTION -->
+<section class="guide-section" id="threats">
+<h2>Understanding the Threat: Gargamel and His Kin</h2>
+<p>Across the planet, there are beings like <span class="smurf-word">Gargamel</span> who seek to capture or harm Smurfs. We do not know all the reasons. Some seek power. Some seek destruction. Some are simply lost in their own darkness.</p>
+<p>But we know how to respond. And importantly—we know how to respond with wisdom, not hatred.</p>
+<img alt="Gargamel with his cat Azrael" class="guide-image small-art" src="assets/gargamel.png"/>
+<h3>When Gargamel Strikes</h3>
+<p>A Gargamel attack is terrifying, yes. But it is also predictable. We have protocols. We have trained. We know the forest better than any invader. And we have each other.</p>
+<div class="interactive-box">
+<h3>Interactive: Survive a Gargamel Attack</h3>
+<p>You are out gathering berries when scouts alert you: <span class="smurf-word">Gargamel</span> has been spotted at the forest edge. What do you do?</p>
+<button onclick="gargamelScenario('hide')">Hide in the dense brush and wait for the all-clear</button>
+<button onclick="gargamelScenario('alert')">Run to the village to sound the alarm</button>
+<button onclick="gargamelScenario('corridor')">Head to the nearest underground corridor entrance</button>
+<div class="result-box" id="gargamelResult"></div>
+</div>
+<h3>Defense Strategy (No Violence Required)</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Alert System:</strong> Three bell rings = danger near. Five = attack imminent. Seven = all clear.</li>
+<li><strong>Scatter Protocol:</strong> Smurfs disperse into pre-planned hiding places throughout the forest.</li>
+<li><strong>Underground Network:</strong> The corridor system is escape and safety rolled into one.</li>
+<li><strong>Confusion Strategy:</strong> We know the forest. <span class="smurf-word">Gargamel</span> does not. Let the terrain be our defense.</li>
+<li><strong>Community Strength:</strong> We never leave a Smurf behind. Scouts ensure everyone reaches safety.</li>
+</ul>
+<div class="interactive-box"><h3>Interactive: Bell Signal Drill</h3><p>A scout shouts a signal. Choose what it means before the next move.</p><button onclick="checkBellSignal(3)" type="button">3 bells</button><button onclick="checkBellSignal(5)" type="button">5 bells</button><button onclick="checkBellSignal(7)" type="button">7 bells</button><div aria-live="polite" class="result-box" id="bellResult"></div></div></section>
+<!-- ENVIRONMENT SECTION -->
+<section class="guide-section" id="environment">
+<h2>Our Environment: Beauty and Brutality</h2>
+<p>Smurf Village sits in a remarkable location: deep mountains, dense forest, and ocean not far beyond. This beauty comes with challenges, but we have learned to thrive in them all.</p>
+<h3>What You'll Face</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Mountain Winters:</strong> Snow can be deep. The cold tests everything. But we have learned to thrive in it.</li>
+<li><strong>Storm Season:</strong> Typhoons and hurricanes sweep through. The forest bends; our buildings hold.</li>
+<li><strong>Earthquakes:</strong> The land shifts sometimes. Our flexible structures absorb the shock.</li>
+<li><strong>Spring Floods:</strong> The rivers swell with snowmelt. We have built around this, not against it.</li>
+<li><strong>The Beauty:</strong> Wildflowers in spring, fireflies in summer, crystal stars in winter. The land is generous when treated with respect.</li>
+</ul>
+<img alt="Seasonal views" class="guide-image wide-image" src="assets/seasons.jpg"/>
+</section>
+<!-- PRACTICAL SURVIVAL: SHELTERS -->
+<section class="guide-section" id="shelter">
+<h2>Practical Survival: Where You Will Live</h2>
+<h3>Shelter Design</h3>
+<p>Your home in the village will be carefully built to withstand weather, hide from threats, and provide comfort. Every shelter follows core principles: it uses natural materials, blends into the environment, and maximizes safety. We <span class="smurf-word">smurf</span> our shelters with care and intention.</p>
+<div class="interactive-box">
+<h3>Interactive: Design Your Shelter</h3>
+<p>Help us understand your needs so we can build your home. Choose based on what matters most to you:</p>
+<div style="margin: 15px 0;">
+<label>Shelter Size:</label><br/>
+<select id="shelterSize">
+<option value="small">Small (1-2 Smurfs)</option>
+<option selected="" value="medium">Medium (3-4 Smurfs)</option>
+<option value="large">Large (5+ Smurfs)</option>
+</select>
+</div>
+<div style="margin: 15px 0;">
+<label>Primary Concern:</label><br/>
+<select id="shelterConcern">
+<option value="warmth">Warmth (Winter protection)</option>
+<option selected="" value="dryness">Dryness (Rain/flood protection)</option>
+<option value="hiding">Hiding (Safety from threats)</option>
+</select>
+</div>
+<button onclick="designShelter()">Design My Shelter</button>
+<div class="result-box" id="shelterResult"></div>
+</div>
+<h3>Shelter Types in Our Village</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Mushroom Homes:</strong> Built within giant mushroom structures, naturally insulated and camouflaged</li>
+<li><strong>Burrow Dwellings:</strong> Underground, warm, dry, and safe from surface threats</li>
+<li><strong>Tree Homes:</strong> In the canopy, connected by bridges, offering vantage points and escape routes</li>
+<li><strong>Stone Shelters:</strong> Built into rocky outcrops, extremely solid and weather-resistant</li>
+</ul>
+</section>
+<!-- PRACTICAL SURVIVAL: FOOD STORAGE -->
+<section class="guide-section" id="corridors">
+<h2>Practical Survival: Food Storage &amp; The Underground Corridors</h2>
+<p>Our greatest achievement is the Underground Corridor Network. Beneath the village lies a vast system of passages and chambers, all carefully maintained and organized. This is where we store food, where we shelter during attacks, and how we move safely through winter. The corridors are our <span class="smurf-word">smurfy</span> lifeline.</p>
+<div class="interactive-box">
+<h3>Interactive: Explore Our Food Storage Corridors</h3>
+<p>Click on different storage areas to learn what we keep and how we preserve it:</p>
+<div class="p5-container" id="p5-corridors"></div>
+<div id="corridorInfo" style="margin-top: 15px; padding: 15px; background: #FFF8DC; border-radius: 8px; display: none;">
+<h4 id="corridorTitle"></h4>
+<p id="corridorDescription"></p>
+</div>
+</div>
+<h3>How We Preserve Food for Harsh Times</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Root Cellar Storage:</strong> Tubers, root vegetables, stored in cool, dark chambers</li>
+<li><strong>Dried Goods:</strong> Berries, mushrooms, herbs hang from corridor ceilings, protected from damp</li>
+<li><strong>Underground Ponds:</strong> Cool water keeps certain foods fresh through winter</li>
+<li><strong>Fermentation:</strong> Ancient technique of preserving vegetables, maintains nutrition through scarcity</li>
+<li><strong>Honey &amp; Preserved Fruits:</strong> Natural sugars that sustain us when fresh food is scarce</li>
+<li><strong>Underground Farming:</strong> Careful, sustainable cultivation of fungi and root crops</li>
+</ul>
+<h3>Navigating the Corridors</h3>
+<p>The corridor system is marked with bioluminescent moss and carved signs. Every Smurf learns the routes. Even young Smurfs can find their way in darkness. The corridors are our veins. They connect us. They protect us. They sustain us.</p>
+<div class="image-row">
+<img class="guide-image medium-art" src="assets/corridors.jpg">
+</img></div>
+</section>
+<!-- DAILY LIFE & ETIQUETTE -->
+<section class="guide-section" id="etiquette">
+<h2>Daily Life &amp; Smurf Etiquette</h2>
+<p>Living in community requires understanding our values and practices. These are not harsh rules. They are the agreements that allow us to thrive together. When we <span class="smurf-word">smurf</span> these values, we create a space where all can flourish.</p>
+<h3>Core Values</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Respect for All Roles:</strong> The Smurf who gathers berries is as vital as the Smurf who builds. No hierarchy of worth.</li>
+<li><strong>Shared Responsibility:</strong> When resources are low, everyone conserves. When one Smurf suffers, all feel it.</li>
+<li><strong>Listen First:</strong> Before speaking, listen. Listen to understand, not to respond.</li>
+<li><strong>Care for the Young &amp; Elderly:</strong> They are our continuity and our wisdom. Protect both fiercely.</li>
+<li><strong>Consent &amp; Boundaries:</strong> Your space, your time, your body are respected. You respect others' the same way.</li>
+<li><strong>Conflict Resolution:</strong> Disputes are brought to elders, not settled in anger. The community helps find peace.</li>
+<li><strong>Treat Others as You Wish to Be Treated:</strong> This goes for Smurfs and all beings. Even Gargamel deserves kindness, though we still protect ourselves wisely.</li>
+</ul>
+<div class="image-row">
+<img class="guide-image wide-image" src="assets/etiquette-1.jpg">
+</img></div>
+<h3>Daily Practices You'll Join</h3>
+<ul style="margin-left: 20px;">
+<li><strong>Morning Gathering:</strong> Brief meeting to share the day's tasks and any alerts</li>
+<li><strong>Shared Meals:</strong> We eat together when possible. Food is communion.</li>
+<li><strong>Evening Stories:</strong> Elders share wisdom, history, and lore. This is how we stay connected to our past.</li>
+<li><strong>Rest Time:</strong> A quiet hour in the afternoon. Even Smurfs need stillness.</li>
+<li><strong>Seasonal Celebrations:</strong> We mark solstices, harvests, and the day the village was founded.</li>
+</ul>
+<div class="image-row">
+<img class="guide-image wide-image" src="assets/etiquette-2.png">
+</img></div>
+<h3 style="margin-top: 25px;">A Note on Gargamel</h3>
+<p>Yes, we know you find it amusing to tease Gargamel when he wanders near the village. We know it's fun to watch him stumble and grow frustrated. But here's the thing: try not to harass Gargamel, even though we love it. It's probably not the best thing to do, and it can escalate his anger. Remember—he is still a being, still worthy of the basic kindness we extend to all creatures. Our strength is not in our cruelty to our enemies, but in our refusal to become cruel ourselves. When you're tempted to tease, remember: the <span class="smurf-word">smurfiest</span> thing we can do is maintain our compassion. That's what makes us unbreakable.</p>
+</section>
+<!-- SMURF LANGUAGE -->
+<section class="guide-section" id="language">
+<h2>Learning to Speak Smurf</h2>
+<p>Our language is simple to learn but rich in meaning. Most words are based on the root word <span class="smurf-word">smurf</span>, which can mean almost anything depending on context, tone, and gesture. When you <span class="smurf-word">smurf</span> with us, you're speaking the language of community.</p>
+<div class="interactive-box">
+
+
+
+
+<h3>Interactive: Smurf Language Matcher</h3><p>Match a Smurf phrase on the left to its meaning on the right. Correct pairs lock in green.</p><div class="p5-container" id="p5-language"></div><div aria-live="polite" class="game-status" id="languageStatus"></div><button class="secondary" onclick="resetLanguageGame()" type="button">Reset Language Game</button></div>
+<h3>Common Smurf Phrases &amp; Their Meanings</h3>
+<div class="hierarchy-list">
+<li><span class="smurf-word">Smurf's blessings:</span> A greeting or wish of good fortune</li>
+<li><span class="smurf-word">That smurfs:</span> That's lovely / That's right / That's wonderful (context dependent)</li>
+<li><span class="smurf-word">Smurf it out:</span> Figure it out together / Work as a team</li>
+<li><span class="smurf-word">Papa Smurf / Mama Smurf:</span> Our leaders (also used for any elder you respect deeply)</li>
+<li><span class="smurf-word">Smurfy day:</span> A good day / A day that went well</li>
+<li><span class="smurf-word">Smurfy:</span> Good / Beautiful / Right / Intentional</li>
+<li><span class="smurf-word">Unsmurf:</span> Unkind / Harmful / Against our values</li>
+<li><span class="smurf-word">Smurfy-smurf:</span> Very good / Excellent / Perfect</li>
+<li><span class="smurf-word">Smurf-smurf-smurf:</span> Expression of deep emotion (joy, sorrow, wonder - context tells the tale)</li>
+<li><span class="smurf-word">Smurfing:</span> Doing something with care and intention</li>
+<li><span class="smurf-word">Smurf home:</span> Welcome / You belong here</li>
+</div>
+<h3>Learning Tip</h3>
+<p>Don't worry about speaking perfectly. We value effort and heart. Smurfs will help you. Ask questions. Listen. Your accent will fade, but your effort will be remembered. Every time you try to <span class="smurf-word">smurf</span> our language, you honor our community.</p>
+</section>
+<!-- CLOSING SECTION -->
+<section class="guide-section" id="closing">
+<h2>Final Words from Smurfette and the Council</h2>
+<p>You have traveled a hard road to reach us. That journey has taught you something. Carry that wisdom with you. We are not perfect. We argue, we fail, we rebuild. But we do it together.</p>
+<p>In coming here, you have chosen to be part of something greater than yourself. You have chosen community. You have chosen to <span class="smurf-word">smurf</span>—to do things with care, with intention, with heart.</p>
+<p>Welcome to Smurf Village. Welcome to our family. Welcome home. We <span class="smurf-word">smurf's blessings</span> upon you all.</p>
+<p style="text-align: right; margin-top: 30px; font-style: italic; font-family: 'Chango', sans-serif; color: #4169E1;">- Smurfette, Mama Smurf, and the Council of Elders</p>
+</section>
+<!-- SMURFS WELCOME SECTION -->
+<section class="guide-section" id="welcome-image">
+<div class="image-row">
+<img alt="Smurfs welcoming you to the village" class="guide-image wide-image" src="assets/welcome-smurfs.png"/>
+</div>
+</section>
+</div>
+
+
+<footer>
+<p>Smurf Village Refugee Guide - A Living Document</p>
+<p>Created for NYU IMA CCC Class | A guide to community, belonging, and what makes a home safe</p>
+</footer>
+<script>
+// ---------- Scroll ornaments ----------
+window.addEventListener('scroll', () => {
+  const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  const t = Math.min(1, window.scrollY / maxScroll);
+  document.querySelectorAll('.scroll-smurf-left,.scroll-smurf-right').forEach((el, i) => {
+    const dir = i === 0 ? 1 : -1;
+    el.style.transform = `translateY(-50%) rotate(${dir * t * 18}deg) scale(${1 + t * .35})`;
+    el.style.opacity = .12 + t * .18;
+  });
+});
+
+// ---------- Accessibility ----------
+function toggleTextSize() {
+  document.body.classList.toggle('large-text');
+}
+function toggleMotion() {
+  document.body.classList.toggle('reduce-motion');
+}
+
+// ---------- First 24 hours ----------
+function updateArrivalProgress() {
+  const checks = [...document.querySelectorAll('#arrivalChecklist input[type="checkbox"]')];
+  const done = checks.filter(c => c.checked).length;
+  const pct = checks.length ? (done / checks.length) * 100 : 0;
+  document.getElementById('arrivalProgress').style.width = pct + '%';
+  document.getElementById('arrivalProgressLabel').textContent =
+    done === checks.length ? '✓ Arrival orientation complete' : `${done} of ${checks.length} complete`;
+}
+
+// ---------- Gargamel scenario ----------
+function gargamelScenario(choice) {
+  const resultBox = document.getElementById('gargamelResult');
+  const responses = {
+    hide: `<strong>You Stay Hidden</strong><br>You crouch low in the brush and stay still until the all-clear. Scouts confirm that using the planned hiding places protected you and kept the paths clear.`,
+    alert: `<strong>You Sound the Alarm</strong><br>You race to the bell tower and ring five quick peals. The village shifts into its practiced emergency routine and gains precious time.`,
+    corridor: `<strong>You Head Underground</strong><br>You find the moss-marked corridor entrance and move into the protected underground network. The route is familiar because every Smurf practices it.`
+  };
+  resultBox.innerHTML = responses[choice] || '';
+  resultBox.classList.add('show');
+}
+
+// ---------- Bell drill ----------
+let bellPrompt = [3,5,7][Math.floor(Math.random()*3)];
+function checkBellSignal(choice) {
+  const meanings = {3:'danger nearby',5:'attack imminent',7:'all clear'};
+  const box = document.getElementById('bellResult');
+  if (choice === bellPrompt) {
+    box.innerHTML = `<strong>Correct.</strong> ${choice} bells means <em>${meanings[choice]}</em>. New signal loaded.`;
+    bellPrompt = [3,5,7][Math.floor(Math.random()*3)];
+  } else {
+    box.innerHTML = `<strong>Try again.</strong> That signal means <em>${meanings[choice]}</em>.`;
+  }
+  box.classList.add('show');
+}
+
+// ---------- Shelter designer ----------
+function designShelter() {
+  const size = document.getElementById('shelterSize').value;
+  const concern = document.getElementById('shelterConcern').value;
+  const resultBox = document.getElementById('shelterResult');
+  const base = {
+    warmth: `<strong>Your Burrow Dwelling</strong><br>Deep underground where earth temperature stays steady. Dry moss and woven fibers insulate the sleeping chamber.`,
+    dryness: `<strong>Your Mushroom Home</strong><br>A naturally water-shedding cap, breathable walls, and raised platforms keep belongings dry during storms.`,
+    hiding: `<strong>Your Tree Haven</strong><br>Camouflaged in the canopy with more than one route out, your home favors visibility, concealment, and escape.`
+  };
+  const sizeText = {
+    small:' Best for one or two Smurfs: compact and easy to maintain.',
+    medium:' Room for a small family or close friends, with shared and private nooks.',
+    large:' A community-sized home with gathering space for meals, meetings, and visitors.'
+  };
+  resultBox.innerHTML = base[concern] + sizeText[size];
+  resultBox.classList.add('show');
+}
+
+// ---------- P5: Food corridor explorer ----------
+function setupCorridorSketch(p) {
+  const corridors = [
+    { nx:.16, ny:.28, label:'Root Cellar', color:[139,69,19], description:'Cool, dark chambers for tubers and root vegetables.' },
+    { nx:.50, ny:.28, label:'Herb Chamber', color:[34,139,34], description:'Dried herbs, medicinal plants, and flavoring plants are organized here.' },
+    { nx:.84, ny:.28, label:'Berry Storage', color:[178,34,52], description:'Fermented and dried berries, plus sealed honey reserves.' },
+    { nx:.16, ny:.72, label:'Grain Vault', color:[210,180,140], description:'Dry grains and seeds, including next season’s planting stock.' },
+    { nx:.50, ny:.72, label:'Mushroom Garden', color:[169,169,169], description:'Living edible fungi cultivated in cool, damp chambers.' },
+    { nx:.84, ny:.72, label:'Underground Stream', color:[64,164,223], description:'Cold spring water for drinking and food preservation.' }
+  ];
+  const holder = document.getElementById('p5-corridors');
+  function targetWidth(){ return Math.max(280, Math.min(720, holder.clientWidth - 8)); }
+
+  p.setup = () => {
+    const c = p.createCanvas(targetWidth(), 390);
+    c.parent('p5-corridors');
+  };
+
+  p.windowResized = () => p.resizeCanvas(targetWidth(), 390);
+
+  p.draw = () => {
+    p.background(229, 236, 252);
+    p.stroke(77,89,116);
+    p.strokeWeight(4);
+    p.line(p.width*.10, p.height*.50, p.width*.90, p.height*.50);
+    p.line(p.width*.16, p.height*.14, p.width*.16, p.height*.86);
+    p.line(p.width*.50, p.height*.14, p.width*.50, p.height*.86);
+    p.line(p.width*.84, p.height*.14, p.width*.84, p.height*.86);
+
+    corridors.forEach(c => {
+      const x=c.nx*p.width, y=c.ny*p.height;
+      const r=Math.max(24, Math.min(38,p.width*.055));
+      const hover=p.dist(p.mouseX,p.mouseY,x,y)<r;
+      p.fill(...(hover?[255,244,184]:c.color));
+      p.stroke(hover?244:45, hover?197:55, hover?66:75);
+      p.strokeWeight(hover?4:2);
+      p.circle(x,y,r*2);
+      p.noStroke();
+      p.fill(20);
+      p.textAlign(p.CENTER,p.CENTER);
+      p.textSize(Math.max(10,Math.min(13,p.width/52)));
+      p.text(c.label,x-r*.82,y-r*.58,r*1.64,r*1.16);
+    });
+  };
+
+  p.mousePressed = () => {
+    corridors.forEach(c => {
+      const x=c.nx*p.width, y=c.ny*p.height;
+      const r=Math.max(24,Math.min(38,p.width*.055));
+      if(p.dist(p.mouseX,p.mouseY,x,y)<r){
+        document.getElementById('corridorTitle').textContent=c.label;
+        document.getElementById('corridorDescription').textContent=c.description;
+        document.getElementById('corridorInfo').style.display='block';
+      }
+    });
+  };
+}
+
+// ---------- P5: Language matcher ----------
+const phraseData = [
+  {id:0, phrase:"Smurf's blessings", meaning:'A greeting or wish of good fortune'},
+  {id:1, phrase:'That smurfs', meaning:"That's lovely / that's wonderful"},
+  {id:2, phrase:'Smurfy day', meaning:'A good day / a day that went well'},
+  {id:3, phrase:'Unsmurf', meaning:'Unkind / harmful / against our values'},
+  {id:4, phrase:'Papa Smurf', meaning:'A respected elder'},
+  {id:5, phrase:'Smurf home', meaning:'Welcome / you belong here'}
+];
+let languageSketch;
+let languageState = {left:null,right:null,matched:new Set(),rightOrder:[]};
+
+function shuffledIds(){
+  const a=phraseData.map(d=>d.id);
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function resetLanguageGame(){
+  languageState={left:null,right:null,matched:new Set(),rightOrder:shuffledIds()};
+  const status=document.getElementById('languageStatus');
+  if(status) status.textContent='';
+}
+
+function setupLanguageSketch(p){
+  const holder=document.getElementById('p5-language');
+  function w(){return Math.max(300,Math.min(760,holder.clientWidth-8));}
+  function geometry(){
+    const pad=12, gap=14, col=(p.width-pad*2-gap)/2, top=48, row=54, cardH=43;
+    return {pad,gap,col,top,row,cardH};
+  }
+  p.setup=()=>{
+    resetLanguageGame();
+    const c=p.createCanvas(w(),420); c.parent('p5-language');
+  };
+  p.windowResized=()=>p.resizeCanvas(w(),420);
+  p.draw=()=>{
+    p.background(248,251,255);
+    const g=geometry();
+    p.noStroke(); p.fill(26,76,118); p.textStyle(p.BOLD); p.textSize(15);
+    p.textAlign(p.CENTER,p.CENTER);
+    p.text('SMURF PHRASES',g.pad,g.top-27,g.col,24);
+    p.text('MEANINGS',g.pad+g.col+g.gap,g.top-27,g.col,24);
+
+    phraseData.forEach((d,i)=>{
+      const y=g.top+i*g.row;
+      drawCard(d.id,d.phrase,g.pad,y,g.col,g.cardH,true);
+    });
+    languageState.rightOrder.forEach((id,i)=>{
+      const d=phraseData.find(x=>x.id===id);
+      const y=g.top+i*g.row;
+      drawCard(id,d.meaning,g.pad+g.col+g.gap,y,g.col,g.cardH,false);
+    });
+  };
+  function drawCard(id,label,x,y,wid,hei,isLeft){
+    const matched=languageState.matched.has(id);
+    const selected=(isLeft?languageState.left:languageState.right)===id;
+    p.stroke(matched?64:22, matched?150:119, matched?88:200);
+    p.strokeWeight(selected?4:2);
+    p.fill(matched?214: selected?225:242, matched?247:selected?241:248, matched?220:selected?255:255);
+    p.rect(x,y,wid,hei,9);
+    p.noStroke(); p.fill(25); p.textStyle(p.NORMAL); p.textSize(p.width<520?10.5:12.5);
+    p.textAlign(p.LEFT,p.CENTER);
+    p.text(label,x+10,y+4,wid-20,hei-8);
+  }
+  p.mousePressed=()=>{
+    const g=geometry();
+    const leftX=g.pad, rightX=g.pad+g.col+g.gap;
+    phraseData.forEach((d,i)=>{
+      const y=g.top+i*g.row;
+      if(p.mouseX>=leftX&&p.mouseX<=leftX+g.col&&p.mouseY>=y&&p.mouseY<=y+g.cardH&&!languageState.matched.has(d.id)){
+        languageState.left=d.id; evaluate();
+      }
+    });
+    languageState.rightOrder.forEach((id,i)=>{
+      const y=g.top+i*g.row;
+      if(p.mouseX>=rightX&&p.mouseX<=rightX+g.col&&p.mouseY>=y&&p.mouseY<=y+g.cardH&&!languageState.matched.has(id)){
+        languageState.right=id; evaluate();
+      }
+    });
+  };
+  function evaluate(){
+    const status=document.getElementById('languageStatus');
+    if(languageState.left===null||languageState.right===null) return;
+    if(languageState.left===languageState.right){
+      languageState.matched.add(languageState.left);
+      status.textContent=languageState.matched.size===phraseData.length?'🎉 You matched every phrase!':'✓ Correct pair.';
+      status.style.color='#2f8f4e';
+    }else{
+      status.textContent='Not a match yet — try another meaning.';
+      status.style.color='#b64242';
+    }
+    languageState.left=null; languageState.right=null;
+  }
+}
+
+new p5(setupCorridorSketch);
+languageSketch = new p5(setupLanguageSketch);
+</script>
+</body>
+</html>
